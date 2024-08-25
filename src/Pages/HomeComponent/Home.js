@@ -26,6 +26,7 @@ const Home = () => {
   const [activeScreen, setActiveScreen] = useState("light-home");
   const [activeTheme, setActiveTheme] = useState("dark-theme");
   const [loader, setLoader] = useState(false);
+  const [authUserDetails, setAuthUserDetails] = useState(null);
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -37,21 +38,28 @@ const Home = () => {
       const userData = jwtDecode(urlToken);
       localStorage.setItem("token", urlToken);
       localStorage.setItem("authUser", JSON.stringify(userData?.user));
+      setAuthUserDetails(userData?.user);
     } else if (!token) {
       navigate("/login");
     } else {
       try {
         const userData = jwtDecode(token);
         localStorage.setItem("authUser", JSON.stringify(userData?.user));
+        setAuthUserDetails(userData?.user);
       } catch (e) {
         navigate("/login");
       }
     }
   }, [urlToken, navigate]);
 
+  useEffect(() => {
+    const storedUser = localStorage.getItem("authUser");
+    if (storedUser) {
+      setAuthUserDetails(JSON.parse(storedUser));
+    }
+  }, []);
+
   const token = localStorage.getItem("token");
-  const userDetails = localStorage.getItem("authUser");
-  const parsedUserDetails = JSON.parse(userDetails);
 
   const clickedMenu = (activeMenu) => {
     switch (activeMenu?.iconName) {
@@ -182,7 +190,7 @@ const Home = () => {
                       : "text-white font-semibold text-sm flex  items-center"
                   }
                 >
-                  {parsedUserDetails?.firstName}'s Workspace{" "}
+                  {authUserDetails?.firstName}'s Workspace{" "}
                   <FaChevronDown
                     color={activeTheme === "light-theme" ? "black" : "white"}
                     size={14}
@@ -234,7 +242,7 @@ const Home = () => {
                 />
               ))}
             </div>
-            <div className="bg-green-800 p-2 rounded-full">{`${parsedUserDetails?.firstName?.[0]}${parsedUserDetails?.lastName?.[0]}`}</div>
+            <div className="bg-green-800 p-2 rounded-full">{`${authUserDetails?.firstName?.[0]}${authUserDetails?.lastName?.[0]}`}</div>
           </div>
 
           {/* components rendering based on side menu icon click ternary operation logic */}
