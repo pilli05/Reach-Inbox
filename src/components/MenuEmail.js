@@ -34,7 +34,6 @@ const MenuEmail = ({ activeTheme }) => {
       });
       if (response.status === 200) {
         setLoader(false);
-        toast.success("All mails fetched");
         setAllMails(response?.data?.data);
         setLeadDetails({
           id: response?.data?.data[0]?.id,
