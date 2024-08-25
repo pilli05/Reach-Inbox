@@ -72,6 +72,7 @@ const MenuEmail = ({ activeTheme }) => {
         setLoader(false);
         setAllThreadMails(response.data.data);
         setThreadId(response.data.data[0]?.threadId);
+        toast.success("Threaded mails fetched successfully!");
       }
     } catch (e) {
       console.log(e);
@@ -94,11 +95,11 @@ const MenuEmail = ({ activeTheme }) => {
     });
   }, []);
 
-  // useEffect(() => {
-  //   if (leadDetails?.threadId) {
-  //     openMail(leadDetails.threadId);
-  //   }
-  // }, [leadDetails]);
+  useEffect(() => {
+    if (leadDetails?.threadId) {
+      openMail(leadDetails.threadId, leadDetails);
+    }
+  }, [leadDetails]);
 
   return (
     <>
