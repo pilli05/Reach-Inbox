@@ -16,6 +16,7 @@ import { useLocation } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
 import { ThreeDots } from "react-loader-spinner";
+import Loader from "../../loaderComponent/Loader";
 
 const Home = () => {
   const [logOutBox, setLogOutBox] = useState(false);
@@ -97,27 +98,7 @@ const Home = () => {
 
   return (
     <>
-      {loader ? (
-        <div
-          className={
-            activeTheme === "light-theme"
-              ? "fixed inset-0 h-screen w-screen flex justify-center items-center bg-black bg-opacity-70 z-50"
-              : "fixed inset-0 h-screen w-screen flex justify-center items-center bg-white bg-opacity-60 z-50"
-          }
-        >
-          {/* loader component */}
-          <ThreeDots
-            visible={true}
-            height="80"
-            width="80"
-            color={activeTheme === "light-theme" ? "white" : "black"}
-            radius="9"
-            ariaLabel="three-dots-loading"
-            wrapperStyle={{}}
-            wrapperClass=""
-          />
-        </div>
-      ) : null}
+      <Loader loader={loader} activeTheme={activeTheme} />
 
       <div>
         <div
@@ -158,6 +139,7 @@ const Home = () => {
                       size={30}
                       color="black"
                       onClick={activateDarkTheme}
+                      className="cursor-pointer"
                     />
                     <CiLight size={25} color="orange" />
                   </>
@@ -168,6 +150,7 @@ const Home = () => {
                       size={30}
                       color="white"
                       onClick={activateLightTheme}
+                      className="cursor-pointer"
                     />
                   </>
                 )}

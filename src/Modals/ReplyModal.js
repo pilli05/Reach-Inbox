@@ -9,6 +9,7 @@ import { IoEyeOutline, IoLinkOutline } from "react-icons/io5";
 import { ThreeDots } from "react-loader-spinner";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Loader from "../loaderComponent/Loader";
 
 const ReplyModal = ({ activeTheme, setShowReplyModal, leadDetails, token }) => {
   const [loader, setLoader] = useState(false);
@@ -59,27 +60,7 @@ const ReplyModal = ({ activeTheme, setShowReplyModal, leadDetails, token }) => {
 
   return (
     <>
-      {loader ? (
-        <div
-          className={
-            activeTheme === "light-theme"
-              ? "fixed inset-0 h-screen w-screen flex justify-center items-center bg-black bg-opacity-70 z-50"
-              : "fixed inset-0 h-screen w-screen flex justify-center items-center bg-white bg-opacity-60 z-50"
-          }
-        >
-          {/* loader component */}
-          <ThreeDots
-            visible={true}
-            height="80"
-            width="80"
-            color={activeTheme === "light-theme" ? "white" : "black"}
-            radius="9"
-            ariaLabel="three-dots-loading"
-            wrapperStyle={{}}
-            wrapperClass=""
-          />
-        </div>
-      ) : null}
+      <Loader loader={loader} activeTheme={activeTheme} />
       <div
         className={
           activeTheme === "light-theme"
