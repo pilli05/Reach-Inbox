@@ -12,13 +12,15 @@ import { MdDarkMode, MdOutlineLogout } from "react-icons/md";
 import { CiLight } from "react-icons/ci";
 import { GoDotFill } from "react-icons/go";
 import Drawer from "../../components/Drawer";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
 import { ThreeDots } from "react-loader-spinner";
 import Loader from "../../loaderComponent/Loader";
 
 const Home = () => {
+  const navigate = useNavigate();
+
   const [logOutBox, setLogOutBox] = useState(false);
   const [darkTheme, setDarkTheme] = useState(false);
   const [activeScreen, setActiveScreen] = useState("light-home");
@@ -27,12 +29,27 @@ const Home = () => {
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const token = queryParams.get("token");
-  const userData = jwtDecode(token);
+  const urlToken = queryParams.get("token");
 
-  localStorage.setItem("token", token);
-  localStorage.setItem("authUser", JSON.stringify(userData?.user));
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (urlToken) {
+      const userData = jwtDecode(urlToken);
+      localStorage.setItem("token", urlToken);
+      localStorage.setItem("authUser", JSON.stringify(userData?.user));
+    } else if (!token) {
+      navigate("/login");
+    } else {
+      try {
+        const userData = jwtDecode(token);
+        localStorage.setItem("authUser", JSON.stringify(userData?.user));
+      } catch (e) {
+        navigate("/login");
+      }
+    }
+  }, [urlToken, navigate]);
 
+  const token = localStorage.getItem("token");
   const userDetails = localStorage.getItem("authUser");
   const parsedUserDetails = JSON.parse(userDetails);
 
@@ -78,6 +95,8 @@ const Home = () => {
       if (response.status === 200) {
         setLoader(false);
         toast.success("Logged out successfully!");
+        localStorage.removeItem("token");
+        localStorage.removeItem("authUser");
         window.location.href = "/login";
       }
     } catch (e) {
