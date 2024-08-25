@@ -206,7 +206,11 @@ const Home = () => {
                   key={index}
                   src={icon.iconUrl}
                   alt={icon.name}
-                  className="cursor-pointer hover:scale-125 transition duration-500 "
+                  className={
+                    activeScreen === icon.iconName
+                      ? "rounded bg-gray-600 cursor-pointer hover:scale-125 transition duration-500 "
+                      : "cursor-pointer hover:scale-125 transition duration-500 "
+                  }
                   onClick={() => clickedMenu(icon)}
                 />
               ))}
