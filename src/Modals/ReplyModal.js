@@ -6,7 +6,6 @@ import { FaCaretDown, FaRegImage, FaRegSmile } from "react-icons/fa";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import { IoIosCode, IoMdClose } from "react-icons/io";
 import { IoEyeOutline, IoLinkOutline } from "react-icons/io5";
-import { ThreeDots } from "react-loader-spinner";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from "../loaderComponent/Loader";
@@ -18,9 +17,9 @@ const ReplyModal = ({ activeTheme, setShowReplyModal, leadDetails, token }) => {
 
   const { threadId, fromName, toName, fromEmail, toEmail } = leadDetails;
 
-  const hadleEmailSend = async () => {
-    // reply mail post API integration
+  // reply mail, post API integration
 
+  const hadleEmailSend = async () => {
     if (subject === "" || message === "") {
       toast.warn("Please fill in the subject and message fields");
       return;

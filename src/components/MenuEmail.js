@@ -5,7 +5,6 @@ import { BsFillReplyFill, BsThreeDots } from "react-icons/bs";
 import { FaChevronDown, FaPaperPlane } from "react-icons/fa";
 import { GoDotFill } from "react-icons/go";
 import { IoReload } from "react-icons/io5";
-import { TailSpin, ThreeDots } from "react-loader-spinner";
 import ReplyModal from "../Modals/ReplyModal";
 import DeleteModal from "../Modals/DeleteModal";
 import { toast } from "react-toastify";
@@ -22,9 +21,9 @@ const MenuEmail = ({ activeTheme }) => {
   const [leadDetails, setLeadDetails] = useState("");
   const [threadId, setThreadId] = useState("");
 
-  const getAllMails = async () => {
-    // get all mails API integration
+  // get all mails API integration
 
+  const getAllMails = async () => {
     const url = "https://hiring.reachinbox.xyz/api/v1/onebox/list";
     try {
       setLoader(true);
@@ -56,9 +55,9 @@ const MenuEmail = ({ activeTheme }) => {
     }
   }, []);
 
-  const openMail = async (threadId, mail) => {
-    // get threaded mails API integration
+  // get threaded mails API integration
 
+  const openMail = async (threadId, mail) => {
     setLeadDetails(mail);
     const url = `https://hiring.reachinbox.xyz/api/v1/onebox/messages/${threadId}`;
     try {
@@ -78,8 +77,6 @@ const MenuEmail = ({ activeTheme }) => {
       console.log(e);
     }
   };
-
-  console.log(leadDetails);
 
   // Here below code is for on key down if key is R reply box open and if key is Delete box will open
 

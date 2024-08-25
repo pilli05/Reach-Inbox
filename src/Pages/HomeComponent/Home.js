@@ -32,6 +32,8 @@ const Home = () => {
   const queryParams = new URLSearchParams(location.search);
   const urlToken = queryParams.get("token");
 
+  // below code is used to get token if token is null then redirecting to login component
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (urlToken) {
@@ -61,6 +63,8 @@ const Home = () => {
 
   const token = localStorage.getItem("token");
 
+  // below switch statement logic is used to to render particular component based on side menu
+
   const clickedMenu = (activeMenu) => {
     switch (activeMenu?.iconName) {
       case "light-home":
@@ -89,9 +93,9 @@ const Home = () => {
     }
   };
 
-  const logOut = async () => {
-    // logout API integration
+  // logout API integration
 
+  const logOut = async () => {
     const url = "https://hiring.reachinbox.xyz/api/v1/onebox/reset";
     try {
       setLoader(true);
@@ -111,6 +115,8 @@ const Home = () => {
       console.error(e);
     }
   };
+
+  // below logic for light and dark theme
 
   const activateDarkTheme = () => {
     setDarkTheme(!darkTheme);

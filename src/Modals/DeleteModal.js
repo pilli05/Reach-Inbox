@@ -6,9 +6,9 @@ import "react-toastify/dist/ReactToastify.css";
 const DeleteModal = ({ setShowDeleteModal, threadId }) => {
   const token = localStorage.getItem("token");
 
-  const deleteThread = async () => {
-    // delete thread API integration
+  // delete thread API integration
 
+  const deleteThread = async () => {
     const url = `https://hiring.reachinbox.xyz/api/v1/onebox/messages/${threadId}`;
 
     try {

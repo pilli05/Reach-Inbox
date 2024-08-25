@@ -7,6 +7,8 @@ const Login = () => {
   localStorage.setItem("location", location);
 
   const login = async () => {
+    // google auth API integration, after successful login redirecting to home component
+
     try {
       window.location.href =
         "https://hiring.reachinbox.xyz/api/v1/auth/google-login?redirect_to=http://localhost:3000";
