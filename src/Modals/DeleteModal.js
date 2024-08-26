@@ -3,7 +3,7 @@ import React from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const DeleteModal = ({ setShowDeleteModal, threadId }) => {
+const DeleteModal = ({ setShowDeleteModal, threadId, onDeletionOfMail }) => {
   const token = localStorage.getItem("token");
 
   // delete thread API integration
@@ -20,6 +20,7 @@ const DeleteModal = ({ setShowDeleteModal, threadId }) => {
       if (response.status === 200) {
         setShowDeleteModal(false);
         toast.success(response.data.message);
+        onDeletionOfMail();
       }
     } catch (e) {
       console.log(e);

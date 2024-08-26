@@ -70,7 +70,6 @@ const MenuEmail = ({ activeTheme }) => {
         setLoader(false);
         setAllThreadMails(response.data.data);
         setThreadId(response.data.data[0]?.threadId);
-        toast.success("Threaded mails fetched successfully!");
       }
     } catch (e) {
       console.log(e);
@@ -97,6 +96,13 @@ const MenuEmail = ({ activeTheme }) => {
     }
   }, [leadDetails]);
 
+  const onDeletionOfMail = async () => {
+    await getAllMails();
+    if (leadDetails?.threadId) {
+      await openMail(leadDetails.threadId, leadDetails);
+    }
+  };
+
   return (
     <>
       <Loader loader={loader} activeTheme={activeTheme} />
@@ -105,6 +111,7 @@ const MenuEmail = ({ activeTheme }) => {
         <DeleteModal
           setShowDeleteModal={setShowDeleteModal}
           threadId={threadId}
+          onDeletionOfMail={onDeletionOfMail}
         />
       ) : null}
 
@@ -309,72 +316,91 @@ const MenuEmail = ({ activeTheme }) => {
             />
           ) : (
             <div className=" overflow-y-auto h-[72vh] ">
-              {allThreadMails && allThreadMails.length > 0
-                ? allThreadMails.map((threadMail) => (
-                    <div
-                      key={threadMail.id}
-                      className={
-                        activeTheme === "light-theme"
-                          ? "cursor-pointer p-3 bg-white rounded-lg mb-7 mx-4 my-5 border border-gray-300 shadow shadow-gray-300"
-                          : "cursor-pointer p-3 bg-[#141517] rounded-lg mb-7 mx-4 my-5 border border-gray-600 shadow shadow-gray-500"
-                      }
-                      onClick={() => setThreadId(threadMail.threadId)}
-                    >
-                      <div className="flex items-center justify-between ">
-                        <h1
-                          className={
-                            activeTheme === "light-theme"
-                              ? "text-black text-sm font-normal"
-                              : "text-sm font-normal"
-                          }
-                        >
-                          {threadMail.subject}
-                        </h1>
-                        <span className="text-xs text-wrap text-[#AEAEAE]">
-                          {moment(threadMail.createdAt).format(
-                            "D MMM YYYY : hh:mm A"
-                          )}
-                        </span>
-                      </div>
-                      <div className="flex items-center space-x-3">
-                        <p className="text-xs text-[#AEAEAE] my-2">
-                          from: {threadMail.fromEmail}
-                        </p>
-                        {threadMail?.cc?.length > 0 ? (
-                          <p className="text-xs text-[#AEAEAE] my-2">
-                            cc: {threadMail.cc}
-                          </p>
-                        ) : null}
-                      </div>
-                      <p className="text-xs text-[#AEAEAE] my-2">
-                        to: {threadMail.toEmail}
-                      </p>
+              {allThreadMails && allThreadMails.length > 0 ? (
+                allThreadMails.map((threadMail) => (
+                  <div
+                    key={threadMail.id}
+                    className={
+                      activeTheme === "light-theme"
+                        ? "cursor-pointer p-3 bg-white rounded-lg mb-7 mx-4 my-5 border border-gray-300 shadow shadow-gray-300"
+                        : "cursor-pointer p-3 bg-[#141517] rounded-lg mb-7 mx-4 my-5 border border-gray-600 shadow shadow-gray-500"
+                    }
+                    onClick={() => setThreadId(threadMail.threadId)}
+                  >
+                    <div className="flex items-center justify-between ">
                       <h1
                         className={
                           activeTheme === "light-theme"
-                            ? "my-5 text-gray-600 text-sm"
-                            : "my-5 text-[#E1E0E0] text-sm"
+                            ? "text-black text-sm font-normal"
+                            : "text-sm font-normal"
                         }
                       >
-                        Hi {threadMail.fromName},
+                        {threadMail.subject}
                       </h1>
-                      <p
-                        className={
-                          activeTheme === "light-theme"
-                            ? "text-gray-600 text-sm "
-                            : "text-[#E1E0E0] text-sm "
-                        }
-                      >
-                        {threadMail.body}
-                      </p>
+                      <span className="text-xs text-wrap text-[#AEAEAE]">
+                        {moment(threadMail.createdAt).format(
+                          "D MMM YYYY : hh:mm A"
+                        )}
+                      </span>
                     </div>
-                  ))
-                : null}
+                    <div className="flex items-center space-x-3">
+                      <p className="text-xs text-[#AEAEAE] my-2">
+                        from: {threadMail.fromEmail}
+                      </p>
+                      {threadMail?.cc?.length > 0 ? (
+                        <p className="text-xs text-[#AEAEAE] my-2">
+                          cc: {threadMail.cc}
+                        </p>
+                      ) : null}
+                    </div>
+                    <p className="text-xs text-[#AEAEAE] my-2">
+                      to: {threadMail.toEmail}
+                    </p>
+                    <h1
+                      className={
+                        activeTheme === "light-theme"
+                          ? "my-5 text-gray-600 text-sm"
+                          : "my-5 text-[#E1E0E0] text-sm"
+                      }
+                    >
+                      Hi {threadMail.fromName},
+                    </h1>
+                    <p
+                      className={
+                        activeTheme === "light-theme"
+                          ? "text-gray-600 text-sm "
+                          : "text-[#E1E0E0] text-sm "
+                      }
+                    >
+                      {threadMail.body}
+                    </p>
+                  </div>
+                ))
+              ) : allMails?.length === 0 && allThreadMails?.length === 0 ? (
+                <div className="w-full h-[60vh] flex flex-col justify-center items-center">
+                  <img
+                    src="/assets/light-no-mails-image.png"
+                    alt="no-mails"
+                    className="w-[120px] h-[120px] mb-10"
+                  />
+                  <h1
+                    className={
+                      activeTheme === "light-theme"
+                        ? "text-lg font-semibold text-black "
+                        : "text-lg font-semibold text-white"
+                    }
+                  >
+                    No mails found
+                  </h1>
+                </div>
+              ) : null}
             </div>
           )}
+
           {showReplyModal ? null : (
             <div className="absolute bottom-0 ml-4 mb-5">
               <button
+                disabled={allMails?.length === 0}
                 onClick={() => setShowReplyModal(true)}
                 className="w-[136px] bg-gradient-to-r from-[#4B63DD] to-[#0524BF] px-3 py-2 text-white rounded flex justify-center items-center text-sm"
               >
